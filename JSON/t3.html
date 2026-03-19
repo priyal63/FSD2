@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var a = {
+        "division1":{
+            "name":["x","p","a","y","n"],
+            "age":[10,20,11,10,12,2]
+        },
+        "division2":{
+            "name":["t","b","f","v","m"],
+            "age":[11,12,10,11,12,7,5]
+        }
+      };
+      var marge=a.division1.name+","+a.division2.name
+      console.log(marge)
+      li=marge.split(",").sort()
+      for (i of li){
+        console.log(`<h2> Student ${i}</h2>`)
+      }
+
+      var marge=a.division1.age+","+a.division2.age
+      console.log(marge)
+      li=marge.split(",").sort((a,b)=>a-b)
+      li1=marge.split(",").sort((a,b)=>b-a)
+      for (i of li){
+        console.log(`<h2> Student ${i}</h2>`)
+      }
+      for (i of li1){
+        console.log(`<h2> Student ${i}</h2>`)
+      }
+    </script>
+  </body>
+</html>

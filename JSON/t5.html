@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="fun()"> click here</button>
+    <h1 id="i1"></h1>
+    <script>
+      function fun() {
+        var str = '{"name":"Dhrite","age":10,"dob":"2010-02-24"}';
+
+        var obj = JSON.parse(str);
+        obj.age=5
+        obj["name"]="Dhyani"
+        document.getElementById("i1").innerHTML=`name is ${obj.name} <br> age is ${obj.age} <br> dob is ${obj.dob}`
+      } 
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+
+    </table>
+    <script>
+        var data={
+            "FSD":[
+            {"topic":"Node","content":"HTTP module"},
+            {"topic":"Express","content":"middleware"}]
+        }
+
+        document.write(` <table border>
+        <tr>
+            <td>content</td>
+            <td>Znode</td>
+        </tr>
+        <tr>
+            <td>${data.FSD[0].content}</td>
+            <td>${data.FSD[0].topic}</td>
+        </tr>
+        <tr>
+            <td>${data.FSD[1].content}</td>
+            <td>${data.FSD[1].topic}</td>
+        </tr>
+    </table>`)
+    </script>
+   
+</body>
+</html>

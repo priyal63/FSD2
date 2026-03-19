@@ -1,0 +1,3 @@
+Hi! How are you ? 
+ Welcome to lj university!
+ Number of Wovels =14

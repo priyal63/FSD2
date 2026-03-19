@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const emp=[
+        {"name":"pqr","age":20},{"name":"xyz","age":15},{"name":"mno","age":18}]
+
+        var e=emp.sort((x,y)=>y.age-x.age)
+        
+        for(i of e){
+            console.log(i.age+" "+i.name)
+        }
+        console.log("smallest age is"+e[e.length-1])
+
+        console.log(Math.max(...emp.map(e=>e.age)))
+
+    </script>
+</body>
+</html>
