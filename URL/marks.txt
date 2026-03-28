@@ -1,0 +1,5 @@
+marks of T1 20
+marks of T2 25
+marks of T3 22
+marks of T4 21
+Total marks 88
