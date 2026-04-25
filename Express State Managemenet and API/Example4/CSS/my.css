@@ -1,0 +1,16 @@
+h1{
+    font-style: italic;
+    color: palevioletred;
+    text-align: center;
+}
+
+form{
+    background-color: blanchedalmond;
+    color: black;
+    text-align: center;
+    width: 300 px;
+}
+img{
+    display: block;
+    margin: 0 auto;
+}
