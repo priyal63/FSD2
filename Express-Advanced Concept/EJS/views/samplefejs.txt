@@ -1,0 +1,9 @@
+<!-- <h1>Hello<%=name%></h1> -->
+<!-- 
+<%# = <b> name </b> %> eror cause it will needs variable --> 
+
+part2:
+
+
+<% let a= "<b>abc</b>"%> 
+<p><%=a%></p>
