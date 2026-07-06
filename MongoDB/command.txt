@@ -1,0 +1,952 @@
+mongod --version
+
+mongosh
+
+-- test> show dbs                   // to show all database
+-- test> use ljub2                  // to create database 
+-- ljub2> use test                  // return to test database 
+-- ljub2> db.dropDatabase()         // to delete database
+
+
+-- ljub2> db.createCollection("student")             // to create table in ljub2 database
+-- ljub2> db.student.renameCollection("students")    // to rename table's name
+-- ljub2> db.products.drop()                         // to delete a table
+-- ljub2> show collections                           // to show all tables
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                   Insert data
+    
+===============================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.students.insertOne({name:"ABC",age:15,marks:83})    // to insert one data (one row)
+
+-- db.students.insertMany([{name:"PQR",age:17,city:"Ahmedabad",marks:75},{name:"XYZ",age:14,city:"Surat",marks:89},{name:"VWX",age:23,city:"Vadodara"}])
+// to insert many data (many rows)
+
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                   Find data
+    
+===========================================================================================================================
+===========================================================================================================================
+    
+
+-- ljub2> db.students.find()                         // to see all students data (rows)
+-- ljub2> db.students.findOne()                      // it returns first data (row)
+-- ljub2> db.students.find({name:"ABC"})             // to find  student with name:"ABC"
+-- ljub2> db.students.find({name:"ABC",city:"Ahmedabad"})   // to find  student with name:"ABC" and  city:"Ahmedabad"
+
+-- syntex --  db.collection.find(query/filter/condition,projection)
+
+===================================================================================
+
+-- ljub2> db.students.find({},{age:1})                      // id is bydefault always show so we need to set it to 0
+[
+  { _id: ObjectId("6a38b56cf02caf774ac245d3"), age: 15 },
+  { _id: ObjectId("6a38b6bdf02caf774ac245d4"), age: 17 },
+  { _id: ObjectId("6a38b6bdf02caf774ac245d5"), age: 14 },
+  { _id: ObjectId("6a38b6bdf02caf774ac245d6"), age: 23 }
+]
+
+===================================================================================
+
+-- ljub2> db.students.find({},{age:1,_id:0})               // it shows age because we give it's value 1 and also accept all coulmn value default 0
+[ { age: 15 }, { age: 17 }, { age: 14 }, { age: 23 } ]
+
+===================================================================================
+
+-- ljub2> db.students.find({},{age:1,_id:0,city:1})        
+[
+  { age: 15 },
+  { age: 17, city: 'Ahmedabad' },
+  { age: 14, city: 'Surat' },
+  { age: 23, city: 'Vadodara' }
+]
+
+===================================================================================
+
+// Ex-->  it shows a city of that student whose name is "VWX"
+
+-- ljub2> db.students.find({name:"VWX"},{city:1,_id:0})   
+[ { city: 'Vadodara' } ]      
+
+=====================================================================================
+
+// Ex-->  Display name and marks of all the students who belongs to surat
+
+-- ljub2> db.students.find({city:"Surat"},{_id:0,name:1,marks:1})  
+[
+  { name: 'XYZ', marks: 89 },
+  { name: 'XYZ' },
+  { name: 'PQR', marks: 93 }
+]
+
+=====================================================================================
+
+// Ex--> it gives one data by skip 2 datas (skips 2 rows and give 1 next row)
+
+-- ljub2> db.students.find({city:"Surat"}).limit(1).skip(2)
+[
+  {
+    _id: ObjectId("6a38bd1ef02caf774ac245d9"),
+    name: 'PQR',
+    age: 13,
+    city: 'Surat',
+    marks: 93
+  }
+]
+
+=====================================================================================
+
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                   Count data
+    
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.count()
+7
+
+-- ljub2> db.myproducts.countDocuments()
+7
+
+-- ljub2> db.myproducts.countDocuments({price:{$lt:30000}})
+6
+
+-- ljub2> db.myproducts.find({price:{$lt:30000}}).count()
+6
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                   Sort data
+    
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({},{pname:1,price:1,_id:0}).sort({price:1})
+[
+  { pname: 'sofa', price: 0 },
+  { pname: 'table', price: 0 },
+  { price: 768, pname: 'tshirt' },
+  { price: 2240, pname: 'shirt' },
+  { price: 27200, pname: 'washingmachine' },
+  { price: 29600, pname: 'mobile' },
+  { price: 45600, pname: 'tv' }
+]
+
+-- ljub2> db.myproducts.find({},{pname:1,price:1,_id:0}).sort({price:-1})
+[
+  { price: 45600, pname: 'tv' },
+  { price: 29600, pname: 'mobile' },
+  { price: 27200, pname: 'washingmachine' },
+  { price: 2240, pname: 'shirt' },
+  { price: 768, pname: 'tshirt' },
+  { pname: 'sofa', price: 0 },
+  { pname: 'table', price: 0 }
+]
+
+-- ljub2> db.myproducts.find({},{pname:1,price:1,_id:0}).sort({pname:-1})
+[
+  { price: 27200, pname: 'washingmachine' },
+  { price: 45600, pname: 'tv' },
+  { price: 768, pname: 'tshirt' },
+  { pname: 'table', price: 0 },
+  { pname: 'sofa', price: 0 },
+  { price: 2240, pname: 'shirt' },
+  { price: 29600, pname: 'mobile' }
+]
+
+-- ljub2> db.myproducts.find({},{pname:1,price:1,_id:0}).sort({pname:1})
+[
+  { price: 29600, pname: 'mobile' },
+  { price: 2240, pname: 'shirt' },
+  { pname: 'sofa', price: 0 },
+  { pname: 'table', price: 0 },
+  { price: 768, pname: 'tshirt' },
+  { price: 45600, pname: 'tv' },
+  { price: 27200, pname: 'washingmachine' }
+]
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                   Update data
+    
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.students.updateOne({marks:83},{$set;{marks:82}})   // it upadte one colums marks to 82 where marks is 83
+-- ljub2> db.students.updateMany({marks:83},{$set;{marks:82}})  // // it upadte all colums marks to 82 where marks is 83
+-- ljub2> db.student.updateOne({name:"PQR",marks:96},{$set:{name:"XYZ",age:18}},{upsert:true})     // it upadate value if found name:"PQR",marks:96 in database else it insert name:"XYZ",age:18 as a new row
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                   Delete data
+    
+===========================================================================================================================
+===========================================================================================================================
+
+
+-- ljub2> db.students.deleteOne({marks:83})         // it deletes one row where marks:83
+-- ljub2> db.students.deleteMany({marks:83})        // it deletes all row where marks:83
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  New table
+
+===========================================================================================================================
+===========================================================================================================================
+
+
+-- ljub2> db.myproducts.insertMany([{name:"tshirt",price:800,qty:10,category:"fashion"},{name:"sofa",price:45000,qty:5,category:"home"},{name:"tv",price:57000,qty:3,category:"electronic"},{name:"shirt",price:2800,qty:8,category:"fashion"},{name:"table",price:13000,qty:5,category:"home"},{name:"mobile",price:37000,qty:7,category:"electronic"}])
+
+
+===========================================================================================================================
+
+--> Ex: display products where category is electronic
+
+-- ljub2> db.myproducts.find({category:"electronic"})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597b"),
+    name: 'tv',
+    price: 57000,
+    qty: 3,
+    category: 'electronic'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597e"),
+    name: 'mobile',
+    price: 37000,
+    qty: 7,
+    category: 'electronic'
+  }
+]
+
+============================================================================================================================
+
+--> Ex: update the price of the product to 34000 where category is electronic s and name id whshingmachine if no such document is available then insert a new documen.
+
+-- ljub2> db.myproducts.updateOne({category:'electronic',name:'washingmachine'},{$set:{price:34000}},{upsert:true})
+{
+  acknowledged: true,
+  insertedId: ObjectId("6a3ccca478763c0212d26b4a"),
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 1
+}
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  Unset column
+
+===========================================================================================================================
+===========================================================================================================================
+
+--> to unset the coumns price and category where qty=5
+
+-- ljub2> db.myproducts.updateMany({qty:5},{$unset:{price:"",category:1}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 2,
+  upsertedCount: 0
+}
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  Rename column
+
+===========================================================================================================================
+===========================================================================================================================
+
+--> it renames name and category column
+
+-- ljub2> db.myproducts.updateMany({},{$rename:{"name":"pname","category":"cat"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 7,
+  modifiedCount: 7,
+  upsertedCount: 0
+}
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  Increament column
+
+===========================================================================================================================
+===========================================================================================================================
+
+--> increament quantity
+
+-- ljub2> db.myproducts.updateMany({},{$inc:{qty:2}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 7,
+  modifiedCount: 7,
+  upsertedCount: 0
+}
+
+===========================================================================================================================
+
+--> if it minus 5 quanity where quantity=12 
+
+ljub2> db.myproducts.updateMany({qty:12},{$inc:{qty:-5}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  Multiplication column
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.updateMany({price:800},{$mul:{price:1.2}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+===========================================================================================================================
+
+-- ljub2> db.myproducts.updateMany({},{$mul:{price:0.8}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 7,
+  modifiedCount: 7,
+  upsertedCount: 0
+}
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  Equal oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+
+-- ljub2> db.myproducts.find({price:{$eq:2240}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597c"),
+    price: 2240,
+    qty: 10,
+    cat: 'fashion',
+    pname: 'shirt'
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  Not equal oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({price:{$ne:2240}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc5979"),
+    price: 768,
+    qty: 7,
+    cat: 'fashion',
+    pname: 'tshirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597a"),
+    qty: 7,
+    pname: 'sofa',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597b"),
+    price: 45600,
+    qty: 5,
+    cat: 'electronic',
+    pname: 'tv'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597d"),
+    qty: 7,
+    pname: 'table',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597e"),
+    price: 29600,
+    qty: 9,
+    cat: 'electronic',
+    pname: 'mobile'
+  },
+  {
+    _id: ObjectId("6a3ccca478763c0212d26b4a"),
+    price: 27200,
+    cat: 'electronic',
+    pname: 'washingmachine',
+    qty: 2
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  Greater oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({price:{$gt:2240}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597b"),
+    price: 45600,
+    qty: 5,
+    cat: 'electronic',
+    pname: 'tv'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597e"),
+    price: 29600,
+    qty: 9,
+    cat: 'electronic',
+    pname: 'mobile'
+  },
+  {
+    _id: ObjectId("6a3ccca478763c0212d26b4a"),
+    price: 27200,
+    cat: 'electronic',
+    pname: 'washingmachine',
+    qty: 2
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                  Less then oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({price:{$lt:2240}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc5979"),
+    price: 768,
+    qty: 7,
+    cat: 'fashion',
+    pname: 'tshirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597a"),
+    qty: 7,
+    pname: 'sofa',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597d"),
+    qty: 7,
+    pname: 'table',
+    price: 0
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                less then and equal oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({price:{$lte:2240}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc5979"),
+    price: 768,
+    qty: 7,
+    cat: 'fashion',
+    pname: 'tshirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597a"),
+    qty: 7,
+    pname: 'sofa',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597c"),
+    price: 2240,
+    qty: 10,
+    cat: 'fashion',
+    pname: 'shirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597d"),
+    qty: 7,
+    pname: 'table',
+    price: 0
+  }
+]
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                Greater then and equal oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({price:{$gte:2240}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597b"),
+    price: 45600,
+    qty: 5,
+    cat: 'electronic',
+    pname: 'tv'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597c"),
+    price: 2240,
+    qty: 10,
+    cat: 'fashion',
+    pname: 'shirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597e"),
+    price: 29600,
+    qty: 9,
+    cat: 'electronic',
+    pname: 'mobile'
+  },
+  {
+    _id: ObjectId("6a3ccca478763c0212d26b4a"),
+    price: 27200,
+    cat: 'electronic',
+    pname: 'washingmachine',
+    qty: 2
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                In oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({qty:{$in:[5,7,10]}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc5979"),
+    price: 768,
+    qty: 7,
+    cat: 'fashion',
+    pname: 'tshirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597a"),
+    qty: 7,
+    pname: 'sofa',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597b"),
+    price: 45600,
+    qty: 5,
+    cat: 'electronic',
+    pname: 'tv'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597c"),
+    price: 2240,
+    qty: 10,
+    cat: 'fashion',
+    pname: 'shirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597d"),
+    qty: 7,
+    pname: 'table',
+    price: 0
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                Not in oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({qty:{$nin:[5,7,10]}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597e"),
+    price: 29600,
+    qty: 9,
+    cat: 'electronic',
+    pname: 'mobile'
+  },
+  {
+    _id: ObjectId("6a3ccca478763c0212d26b4a"),
+    price: 27200,
+    cat: 'electronic',
+    pname: 'washingmachine',
+    qty: 2
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                And oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+--> display products where price= 2240 and pname=shirt
+
+-- ljub2> db.myproducts.find({$and:[{price:2240},{pname:"shirt"}]})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597c"),
+    price: 2240,
+    qty: 10,
+    cat: 'fashion',
+    pname: 'shirt'
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                Or oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+--> display products where price<=2240 or pname=shirt
+
+-- ljub2> db.myproducts.find({$or:[{price:{$gt:40000}},{pname:"shirt"}]})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc5979"),
+    price: 768,
+    qty: 7,
+    cat: 'fashion',
+    pname: 'tshirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597a"),
+    qty: 7,
+    pname: 'sofa',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597d"),
+    qty: 7,
+    pname: 'table',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597e"),
+    price: 29600,
+    qty: 9,
+    cat: 'electronic',
+    pname: 'mobile'
+  },
+  {
+    _id: ObjectId("6a3ccca478763c0212d26b4a"),
+    price: 27200,
+    cat: 'electronic',
+    pname: 'washingmachine',
+    qty: 2
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                Nor oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+--> display products where price= 2240 nor pname=shirt
+
+-- ljub2> db.myproducts.find({$nor:[{price:2240},{pname:"shirt"}]})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc5979"),
+    price: 768,
+    qty: 7,
+    cat: 'fashion',
+    pname: 'tshirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597a"),
+    qty: 7,
+    pname: 'sofa',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597b"),
+    price: 45600,
+    qty: 5,
+    cat: 'electronic',
+    pname: 'tv'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597d"),
+    qty: 7,
+    pname: 'table',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597e"),
+    price: 29600,
+    qty: 9,
+    cat: 'electronic',
+    pname: 'mobile'
+  },
+  {
+    _id: ObjectId("6a3ccca478763c0212d26b4a"),
+    price: 27200,
+    cat: 'electronic',
+    pname: 'washingmachine',
+    qty: 2
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                                Not oparator
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({price:{$not:{$gt:3000}}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc5979"),
+    price: 768,
+    qty: 7,
+    cat: 'fashion',
+    pname: 'tshirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597a"),
+    qty: 7,
+    pname: 'sofa',
+    price: 0
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597c"),
+    price: 2240,
+    qty: 10,
+    cat: 'fashion',
+    pname: 'shirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597d"),
+    qty: 7,
+    pname: 'table',
+    price: 0
+  }
+]
+
+===========================================================================================================================
+
+-- ljub2> db.myproducts.find({qty:{$not:{$in:[5,7]}}})
+[
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597c"),
+    price: 2240,
+    qty: 10,
+    cat: 'fashion',
+    pname: 'shirt'
+  },
+  {
+    _id: ObjectId("6a3cc8751a5d2a7916fc597e"),
+    price: 29600,
+    qty: 9,
+    cat: 'electronic',
+    pname: 'mobile'
+  },
+  {
+    _id: ObjectId("6a3ccca478763c0212d26b4a"),
+    price: 27200,
+    cat: 'electronic',
+    pname: 'washingmachine',
+    qty: 2
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+Example2
+Perform the tasks as asked below.
+Create Collection “employees” with following data
+[{_id: 1,name: "Eric",age: 30,position: "Full Stack Developer",salary: 60000},
+{_id: 2,name: "Erica",age: 35,position: "Intern",salary: 8000},
+{_id: 3,name: "Erical",age: 40,position: "UX/UI Designer",salary: 56000},
+{_id: 4,name: "treric7",age: 37,position: "Team Leader",salary: 85000},
+{_id: 5,name: "Eliza",age: 25,position: "Software Developer",salary: 45000},
+{_id: 6,name: "Trian",age: 29,position: "Data Scientist",salary: 75000},
+{_id: 7,name: "Elizan",age: 25,position: "Full Stack Developer",salary: 49000}]
+
+1)	Find All Documents
+--> ljub2> db.employees.find()
+
+2)	Find Documents by Position “Full Stack Developer”:\
+--> ljub2> db.employees.find({position:"Full Stack Developer"})
+[
+  {
+    _id: 1,
+    name: 'Eric',
+    age: 30,
+    position: 'Full Stack Developer',
+    salary: 60000
+  },
+  {
+    _id: 7,
+    name: 'Elizan',
+    age: 25,
+    position: 'Full Stack Developer',
+    salary: 49000
+  }
+]
+
+3)	Retrieve name of employees whose age is greater than or equal to 25 and less than or equal to 40.
+--> ljub2> db.employees.find({age:{$gte:25,$lte:40}},{name:1,_id:0})
+[
+  { name: 'Eric' },
+  { name: 'Erica' },
+  { name: 'Erical' },
+  { name: 'treric7' },
+  { name: 'Eliza' },
+  { name: 'Trian' },
+  { name: 'Elizan' }
+]
+
+4)	Retrieve name of the employee with the highest salary.
+--> ljub2> db.employees.find({},{name:1,_id:0}).sort({salary:-1}).limit(1)
+[ { name: 'treric7' } ]
+
+5)	Retrieve employees with a salary greater than 50000.
+--> ljub2> db.employees.find({salary:{$gte:50000}})
+[
+  {
+    _id: 1,
+    name: 'Eric',
+    age: 30,
+    position: 'Full Stack Developer',
+    salary: 60000
+  },
+  {
+    _id: 3,
+    name: 'Erical',
+    age: 40,
+    position: 'UX/UI Designer',
+    salary: 56000
+  },
+  {
+    _id: 4,
+    name: 'treric7',
+    age: 37,
+    position: 'Team Leader',
+    salary: 85000
+  },
+  {
+    _id: 6,
+    name: 'Trian',
+    age: 29,
+    position: 'Data Scientist',
+    salary: 75000
+  }
+]
+
+6)	Count the number of employees who have salary greater than 50000 
+--> ljub2> db.employees.find({salary:{$gte:50000}}).count()
+4
+
+7)	Retrieve employees who are either " Software Developer" or "Full Stack Developer" and are  below 30 years.
+--> ljub2> db.employees.find({$and:[{$or:[{position:"Software Developer"},{position:"Full Stack Developer"}]},{age:{$lt:30}}]})
+[
+  {
+    _id: 5,
+    name: 'Eliza',
+    age: 25,
+    position: 'Software Developer',
+    salary: 45000
+  },
+  {
+    _id: 7,
+    name: 'Elizan',
+    age: 25,
+    position: 'Full Stack Developer',
+    salary: 49000
+  }
+]
+
+8)	Increase the salary of an employee who has salary less than 50000 by 10%.
+--> ljub2> db.employees.updateOne({salary:{$lt:50000}},{$mul:{salary:0.9}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+9)	Delete all employees who are older than 50.
+
+
+10)	Give a 5% salary raise to all "Data Scientist"
+
+

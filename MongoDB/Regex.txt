@@ -1,0 +1,251 @@
+ db.regex.insertMany([{name:'ABC',age:20,branch:'CSE',marks:20},{name:'Test',age:21,branch:'CE',marks:15},{name:'Test123',age:20,branch:'CSE',marks:22},{name:'Testing',age:21,branch:'CSE',marks:25},{name:'123Test',age:19,branch:'CE',marks:18},{name:'Anush',age:19,branch:'CSE',marks:20},{name:'Nenct12',age:20,branch:'IT',marks:15},{name:'NOP',age:21,branch:'CE',marks:12}])
+
+ db.regex.find({name:{$regex:/test/}})
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/test/i}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711b"),
+  name: 'Test',
+  age: 21,
+  branch: 'CE',
+  mark: 15
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711c"),
+  name: 'Test123',
+  age: 20,
+  branch: 'CSE',
+  mark: 22
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711d"),
+  name: 'Testing',
+  age: 21,
+  branch: 'CSE',
+  mark: 25
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711e"),
+  name: '123Test',
+  age: 19,
+  branch: 'CE',
+  mark: 18
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/^test/i}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711b"),
+  name: 'Test',
+  age: 21,
+  branch: 'CE',
+  mark: 15
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711c"),
+  name: 'Test123',
+  age: 20,
+  branch: 'CSE',
+  mark: 22
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711d"),
+  name: 'Testing',
+  age: 21,
+  branch: 'CSE',
+  mark: 25
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/test$/}})
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/test$/i}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711b"),
+  name: 'Test',
+  age: 21,
+  branch: 'CE',
+  mark: 15
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711e"),
+  name: '123Test',
+  age: 19,
+  branch: 'CE',
+  mark: 18
+}
+db.regex.find({name:{$regex:/^test$/i}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711b"),
+  name: 'Test',
+  age: 21,
+  branch: 'CE',
+  mark: 15
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/[0-9]/}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711c"),
+  name: 'Test123',
+  age: 20,
+  branch: 'CSE',
+  mark: 22
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711e"),
+  name: '123Test',
+  age: 19,
+  branch: 'CE',
+  mark: 18
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd7120"),
+  name: 'Nency12',
+  age: 20,
+  branch: 'IT',
+  mark: 15
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/^[0-9]/}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711e"),
+  name: '123Test',
+  age: 19,
+  branch: 'CE',
+  mark: 18
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/[0-9]$/}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711c"),
+  name: 'Test123',
+  age: 20,
+  branch: 'CSE',
+  mark: 22
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd7120"),
+  name: 'Nency12',
+  age: 20,
+  branch: 'IT',
+  mark: 15
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/^[0-9]$/}})
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/^[0-9]*$/}})
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/^[A-Za-z]{3,5}$/}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711a"),
+  name: 'ABC',
+  age: 20,
+  branch: 'CSE',
+  mark: 20
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711b"),
+  name: 'Test',
+  age: 21,
+  branch: 'CE',
+  mark: 15
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711f"),
+  name: 'Ansh',
+  age: 19,
+  branch: 'CSE',
+  mark: 20
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd7121"),
+  name: 'NOP',
+  age: 21,
+  branch: 'CE',
+  mark: 12
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/^[A-Z].*[0-9]$/}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711c"),
+  name: 'Test123',
+  age: 20,
+  branch: 'CSE',
+  mark: 22
+}
+{
+  _id: ObjectId("6a4609b319ec2c9234dd7120"),
+  name: 'Nency12',
+  age: 20,
+  branch: 'IT',
+  mark: 15
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+db.regex.find({name:{$regex:/^[A-Za-z]{4}[0-9]+$/}})
+{
+  _id: ObjectId("6a4609b319ec2c9234dd711c"),
+  name: 'Test123',
+  age: 20,
+  branch: 'CSE',
+  mark: 22
+}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+ljub2> db.regex.find({name:{$regex:/^(A|N)/}})
+[
+  {
+    _id: ObjectId("6a460c500c855c317657c450"),
+    name: 'ABC',
+    age: 20,
+    branch: 'CSE',
+    marks: 20
+  },
+  {
+    _id: ObjectId("6a460c500c855c317657c455"),
+    name: 'Anush',
+    age: 19,
+    branch: 'CSE',
+    marks: 20
+  },
+  {
+    _id: ObjectId("6a460c500c855c317657c456"),
+    name: 'Nenct12',
+    age: 20,
+    branch: 'IT',
+    marks: 15
+  },
+  {
+    _id: ObjectId("6a460c500c855c317657c457"),
+    name: 'NOP',
+    age: 21,
+    branch: 'CE',
+    marks: 12
+  }
+]
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+

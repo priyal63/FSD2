@@ -1,0 +1,327 @@
+===========================================================================================================================
+===========================================================================================================================
+
+                                             Aggregation
+
+===========================================================================================================================
+===========================================================================================================================
+
+
+                                            collection
+                                                ^
+                                                |
+                                              $match
+                                                ^
+                                                |
+                                              $group  <-- $sum,$avg,$max,$min
+                                                ^
+                                                |
+                                            $Software
+                                                ^
+                                                |
+                                            $project
+
+===========================================================================================================================
+===========================================================================================================================
+
+
+ljub2> db.ljstudent.insertMany([{name:"A",city:"Ahmedabad",marks:85},{name:"B",city:"Surat",marks:70},{name:"C",city:"Ahmedabad",marks:90},{name:"D",city:"Surat",marks:80},{name:"E",city:"Rajkot",marks:85}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("6a41eeb6b51612a7463ce440"),
+    '1': ObjectId("6a41eeb6b51612a7463ce441"),
+    '2': ObjectId("6a41eeb6b51612a7463ce442"),
+    '3': ObjectId("6a41eeb6b51612a7463ce443"),
+    '4': ObjectId("6a41eeb6b51612a7463ce444")
+  }
+}
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                            Match
+
+===========================================================================================================================
+===========================================================================================================================
+
+-- ljub2> db.ljstudent.aggregate([{$match:{city:"Surat"}}])
+[
+  {
+    _id: ObjectId("6a41eeb6b51612a7463ce441"),
+    name: 'B',
+    city: 'Surat',
+    marks: 70
+  },
+  {
+    _id: ObjectId("6a41eeb6b51612a7463ce443"),
+    name: 'D',
+    city: 'Surat',
+    marks: 80
+  }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                             Group
+
+===========================================================================================================================
+===========================================================================================================================
+
+--> Count student city wise
+-- ljub2> db.ljstudent.aggregate([{$group:{_id:"$city",totle:{$sum:1}}}])
+[
+  { _id: 'Rajkot', totle: 1 },
+  { _id: 'Ahmedabad', totle: 2 },
+  { _id: 'Surat', totle: 2 }
+]
+
+--> 
+-- ljub2> db.ljstudent.aggregate([{$group:{_id:"$city",avgmarks:{$avg:"$marks"}}}])
+[
+  { _id: 'Ahmedabad', avgmarks: 87.5 },
+  { _id: 'Surat', avgmarks: 75 },
+  { _id: 'Rajkot', avgmarks: 85 }
+]
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                            Sort
+
+===========================================================================================================================
+===========================================================================================================================
+
+
+
+ljub2> db.ljstudent.aggregate([{$sort:{marks:-1}}])
+[
+  {
+    _id: ObjectId("6a41eeb6b51612a7463ce442"),
+    name: 'C',
+    city: 'Ahmedabad',
+    marks: 90
+  },
+  {
+    _id: ObjectId("6a41eeb6b51612a7463ce440"),
+    name: 'A',
+    city: 'Ahmedabad',
+    marks: 85
+  },
+  {
+    _id: ObjectId("6a41eeb6b51612a7463ce444"),
+    name: 'E',
+    city: 'Rajkot',
+    marks: 85
+  },
+  {
+    _id: ObjectId("6a41eeb6b51612a7463ce443"),
+    name: 'D',
+    city: 'Surat',
+    marks: 80
+  },
+  {
+    _id: ObjectId("6a41eeb6b51612a7463ce441"),
+    name: 'B',
+    city: 'Surat',
+    marks: 70
+  }
+]
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                           Project
+
+===========================================================================================================================
+===========================================================================================================================
+
+
+--ljub2> db.ljstudent.aggregate([{$project:{name:1,marks:1,_id:0}}])
+[
+  { name: 'A', marks: 85 },
+  { name: 'B', marks: 70 },
+  { name: 'C', marks: 90 },
+  { name: 'D', marks: 80 },
+  { name: 'E', marks: 85 }
+]
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+
+--> Calculate average marks of students in each city and sort the result in descending order of average marks.
+    Display city and average marks of the students.
+
+-- ljub2> db.ljstudent.aggregate([{$group:{_id:"$city",avgmarks:{$avg:"$marks"}}},{$sort:{avgmarks:-1}},{$project:{_id:0,city:"$_id",avgmarks:"$avgmarks"}}])
+[
+  { city: 'Ahmedabad', avgmarks: 87.5 },
+  { city: 'Rajkot', avgmarks: 85 },
+  { city: 'Surat', avgmarks: 75 }
+]
+
+===========================================================================================================================
+===========================================================================================================================
+
+--> Select the students whose marks are >=80
+    Calculate city wise total marks and sort in ascending order od total marks and display only city and totle marks.
+ 
+-- ljub2> db.ljstudent.aggregate([{$match:{marks:{$gte:80}}},{$group:{_id:"$city",total:{$sum:"$marks"}}},{$sort:{total:1}},{$project:{city:"$_id",total:"$total",_id:0}}])
+[
+  { city: 'Surat', total: 80 },
+  { city: 'Rajkot', total: 85 },
+  { city: 'Ahmedabad', total: 175 }
+]
+
+
+
+===========================================================================================================================
+===========================================================================================================================
+
+                                          Example 5
+
+===========================================================================================================================
+===========================================================================================================================
+
+Create Collection orders and solve the question using the concept of aggregation.
+db.orders.insertMany([
+{_id:1, customer:"Nidhi", product:"Laptop", category:"Electronics", amount:55000},
+{_id:2, customer:"Rahul", product:"Mobile", category:"Electronics", amount:25000},
+{_id:3, customer:"Priya", product:"Shoes", category:"Fashion", amount:3000},
+{_id:4, customer:"Amit", product:"T-Shirt", category:"Fashion", amount:1500},
+{_id:5, customer:"Neha", product:"Refrigerator", category:"Electronics", amount:40000},
+{_id:6, customer:"Karan", product:"Watch", category:"Fashion", amount:5000},
+{_id:7, customer:"Riya", product:"Microwave", category:"Electronics", amount:12000}
+])
+
+===========================================================================================================================
+
+Question 1
+-- Calculate the average order amount for each category with amount greater than 10000. Sort the result in descending order of average amount and display only category and average amount.
+--> db.orders.aggregate([
+{
+$match:{amount:{$gt:10000}}
+},
+{
+   $group:{
+      _id:"$category",
+      averageAmount:{$avg:"$amount"}
+   }
+},
+{
+   $sort:{averageAmount:-1}
+},
+{
+   $project:{
+      category:"$_id",
+      AverageAmount:"$averageAmount",
+      _id:0
+   }
+}
+])
+
+===========================================================================================================================
+
+Question 2
+-- Calculate the total sales amount for each category. Sort the result in descending order of total sales and display only category and total sales.
+Solution
+--> db.orders.aggregate([
+{
+   $group:{
+      _id:"$category",
+      totalSales:{$sum:"$amount"}
+   }
+},
+{
+   $sort:{totalSales:-1}
+},
+{
+   $project:{
+      Category:"$_id",
+      TotalSales:"$totalSales",
+      _id:0
+   }
+}
+])
+
+===========================================================================================================================
+
+Question 3
+-- Find the highest order amount for each category. Sort the result in descending order of highest order amount and display only the category and highest order amount.
+Solution
+--> db.orders.aggregate([
+{
+   $group:{
+      _id:"$category",
+      highestAmount:{
+         $max:"$amount"
+      }
+   }
+},
+{
+   $sort:{
+      highestAmount:-1
+   }
+},
+{
+   $project:{
+      Category:"$_id",
+      HighestAmount:"$highestAmount",
+      _id:0
+   }
+}
+])
+
+===========================================================================================================================
+
+Question 4
+-- Count the number of orders in each category. Display only the category and total number of orders.
+Solution
+--> db.orders.aggregate([
+{
+   $group:{
+      _id:"$category",
+      totalOrders:{
+         $sum:1
+      }
+   }
+},
+{
+   $project:{
+      Category:"$_id",
+      TotalOrders:"$totalOrders",
+      _id:0
+   }
+}
+])
+
+===========================================================================================================================
+
+Question 5
+-- Find the minimum order amount for each category. Display only the category and minimum order amount.
+Solution
+--> db.orders.aggregate([
+{
+   $group:{
+      _id:"$category",
+      minimumAmount:{
+         $min:"$amount"
+      }
+   }
+},
+{
+   $project:{
+      Category:"$_id",
+      MinimumAmount:"$minimumAmount",
+      _id:0
+   }
+}
+])
+
+============================================================================================================================
+
